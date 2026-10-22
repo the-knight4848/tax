@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f8f5">
+    <meta name="description" content="เครื่องมือประมาณภาษีเงินได้บุคคลธรรมดาสำหรับพนักงานประจำ คำนวณในอุปกรณ์ของคุณ">
+    <title>เครื่องคำนวณภาษีเงินได้บุคคลธรรมดา</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#calculator">ข้ามไปยังแบบคำนวณ</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#" aria-label="หน้าหลัก เครื่องคำนวณภาษี">
+          <span class="brand-mark" aria-hidden="true">ภ</span>
+          <span>คิดภาษี<span class="brand-dot">.</span></span>
+        </a>
+        <span class="privacy-note"><span aria-hidden="true">●</span> คำนวณในอุปกรณ์ของคุณ</span>
+      </div>
+    </header>
+
+    <main id="calculator" class="page-shell">
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow">วางแผนภาษีได้ด้วยตัวเอง</p>
+        <h1 id="page-title">ปีนี้จะเสียภาษีเท่าไรนะ?</h1>
+        <p class="hero-copy">กรอกข้อมูลรายได้และค่าลดหย่อน เพื่อดูประมาณการภาษีและเข้าใจที่มาของตัวเลข</p>
+        <div class="rule-status">
+          <span class="status-icon" aria-hidden="true">i</span>
+          <p><strong>ปีภาษี <span id="tax-year"></span></strong> · ปรับปรุงชุดข้อมูลวันที่ <span id="updated-at"></span><br>
+            <span class="warning-text">กฎและเพดานรายการลดหย่อนยังต้องตรวจสอบกับกรมสรรพากร</span></p>
+        </div>
+      </section>
+
+      <div class="layout">
+        <div class="form-column">
+          <form id="tax-form" novalidate>
+            <section class="panel" aria-labelledby="income-title">
+              <div class="section-heading">
+                <span class="step-number" aria-hidden="true">1</span>
+                <div><h2 id="income-title">รายได้ของคุณ</h2><p>กรอกยอดรวมที่คาดว่าจะได้รับในปีภาษีนี้</p></div>
+              </div>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="salary-per-month">เงินเดือนต่อเดือน <span class="required-note">จำเป็น</span></label>
+                  <div class="input-with-unit"><input id="salary-per-month" name="salaryPerMonth" type="text" inputmode="decimal" autocomplete="off" placeholder="เช่น 40,000" aria-describedby="salary-hint"><span>บาท</span></div>
+                  <small id="salary-hint">เงินเดือนก่อนหักภาษีและประกันสังคม</small>
+                </div>
+                <div class="field">
+                  <label for="salary-months">จำนวนเดือนที่ได้รับเงินเดือน</label>
+                  <div class="input-with-unit"><input id="salary-months" name="salaryMonths" type="text" inputmode="numeric" autocomplete="off" value="12" aria-describedby="months-hint"><span>เดือน</span></div>
+                  <small id="months-hint">กรอกได้ตั้งแต่ 0 ถึง 12 เดือน</small>
+                </div>
+                <div class="field">
+                  <label for="bonus">โบนัสต่อปี</label>
+                  <div class="input-with-unit"><input id="bonus" name="bonus" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div>
+                </div>
+                <div class="field">
+                  <label for="commission">ค่าคอมมิชชัน</label>
+                  <div class="input-with-unit"><input id="commission" name="commission" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div>
+                </div>
+                <div class="field">
+                  <label for="overtime">ค่าล่วงเวลา</label>
+                  <div class="input-with-unit"><input id="overtime" name="overtime" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div>
+                </div>
+                <div class="field">
+                  <label for="other-income">รายได้อื่น</label>
+                  <div class="input-with-unit"><input id="other-income" name="otherIncome" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div>
+                  <small>หากเป็นรายได้คนละประเภทภาษี ควรตรวจสอบวิธีคำนวณเพิ่มเติม</small>
+                </div>
+                <div class="field">
+                  <label for="withholding">ภาษีหัก ณ ที่จ่ายสะสม</label>
+                  <div class="input-with-unit"><input id="withholding" name="withholding" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div>
+                  <small>ดูยอดสะสมได้จากสลิปเงินเดือนหรือหนังสือรับรอง 50 ทวิ</small>
+                </div>
+                <div class="field">
+                  <label for="social-security">เงินสมทบประกันสังคมสะสม</label>
+                  <div class="input-with-unit"><input id="social-security" name="socialSecurity" type="text" inputmode="decimal" autocomplete="off" placeholder="เช่น 9,000"><span>บาท</span></div>
+                  <small>เพดานตามยอดที่จ่ายจริง; ตรวจสอบสิทธิของปีภาษี</small>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="deductions-title">
+              <div class="section-heading">
+                <span class="step-number" aria-hidden="true">2</span>
+                <div><h2 id="deductions-title">ค่าใช้จ่ายและค่าลดหย่อน</h2><p>ระบบคำนวณค่าใช้จ่ายเงินเดือนให้อัตโนมัติ</p></div>
+              </div>
+              <div class="auto-expense">
+                <span class="auto-icon" aria-hidden="true">✓</span>
+                <div><strong>ค่าใช้จ่ายจากเงินเดือน</strong><p>หัก <span id="salary-expense-rate"></span> ของเงินได้จากการจ้างงาน สูงสุด <span id="salary-expense-cap"></span></p></div>
+                <span id="salary-expense-preview" class="preview-value">0 บาท</span>
+              </div>
+              <div class="field-grid">
+                <div class="field">
+                  <span class="field-label">ค่าลดหย่อนส่วนตัว</span>
+                  <div class="fixed-allowance"><span>ใช้ค่าเริ่มต้นในชุดข้อมูล</span><strong id="personal-preview">60,000 บาท</strong></div>
+                  <small>สิทธิและจำนวนต้องตรวจสอบตามปีภาษี</small>
+                </div>
+                <div class="field">
+                  <label class="switch-row" for="spouse"><span><strong>คู่สมรสไม่มีรายได้</strong><small>เลือกเมื่อเข้าเงื่อนไขตามกฎหมาย</small></span><input id="spouse" name="spouse" type="checkbox"><span class="switch-ui" aria-hidden="true"></span></label>
+                  <small>เพดาน: <span data-cap="spouse"></span> · ต้องตรวจสอบเงื่อนไข</small>
+                </div>
+                <div class="field field-wide">
+                  <div class="field-topline"><span class="field-label">จำนวนบุตร</span><button class="text-button" id="add-child" type="button">＋ เพิ่มบุตร</button></div>
+                  <div id="children-list" class="dynamic-list" aria-live="polite"></div>
+                  <small>เพดานตั้งต้นต่อคน: <span data-cap="childBefore2561"></span> หรือ <span data-cap="childFrom2561"></span> ตามปีเกิด; ต้องตรวจสอบสิทธิและเงื่อนไข</small>
+                </div>
+                <div class="field">
+                  <label for="supported-parents">อุปการะบิดาและมารดา</label>
+                  <select id="supported-parents" name="supportedParents" aria-describedby="parents-hint">
+                    <option value="0">ไม่มี</option><option value="1">1 คน</option><option value="2">2 คน</option><option value="3">3 คน</option><option value="4">4 คน</option>
+                  </select>
+                  <small id="parents-hint">เพดานตั้งต้นต่อคน: <span data-cap="parent"></span>; ตรวจสอบอายุ รายได้ และเงื่อนไขผู้ใช้สิทธิร่วม</small>
+                </div>
+                <div class="field"><label for="life-insurance">เบี้ยประกันชีวิต</label><div class="input-with-unit"><input id="life-insurance" name="lifeInsurance" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>เพดานตั้งต้น: <span data-cap="lifeInsurance"></span></small></div>
+                <div class="field"><label for="health-insurance">เบี้ยประกันสุขภาพ</label><div class="input-with-unit"><input id="health-insurance" name="healthInsurance" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>เพดานตั้งต้น: <span data-cap="healthInsurance"></span> และมีเพดานรวมกับประกันชีวิต</small></div>
+                <div class="field"><label for="parent-health-insurance">ประกันสุขภาพบิดามารดา</label><div class="input-with-unit"><input id="parent-health-insurance" name="parentHealthInsurance" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>เพดานตั้งต้น: <span data-cap="parentHealthInsurance"></span></small></div>
+                <div class="field"><label for="provident-fund">กองทุนสำรองเลี้ยงชีพ</label><div class="input-with-unit"><input id="provident-fund" name="providentFund" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>เพดาน: ต้องตรวจสอบกับกรมสรรพากร</small></div>
+                <div class="field"><label for="government-pension-fund">กบข.</label><div class="input-with-unit"><input id="government-pension-fund" name="governmentPensionFund" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>เพดาน: ต้องตรวจสอบกับกรมสรรพากร</small></div>
+                <div class="field"><label for="retirement-fund">กองทุนเพื่อการเกษียณ เช่น RMF</label><div class="input-with-unit"><input id="retirement-fund" name="retirementFund" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>เพดานรวมและเงื่อนไข: ต้องตรวจสอบ</small></div>
+                <div class="field"><label for="savings-fund">กองทุนเพื่อการออมที่กฎหมายรับรอง</label><div class="input-with-unit"><input id="savings-fund" name="savingsFund" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>ชื่อกองทุน สิทธิ และเพดาน: ต้องตรวจสอบกับกรมสรรพากร</small></div>
+                <div class="field"><label for="home-loan-interest">ดอกเบี้ยกู้ซื้อที่อยู่อาศัย</label><div class="input-with-unit"><input id="home-loan-interest" name="homeLoanInterest" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>เพดานตั้งต้น: <span data-cap="homeLoanInterest"></span></small></div>
+                <div class="field"><label for="general-donation">เงินบริจาคทั่วไป</label><div class="input-with-unit"><input id="general-donation" name="generalDonation" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>ใช้ได้ตามเพดานเงินได้คงเหลือ; ตรวจสอบประเภทและใบเสร็จ</small></div>
+                <div class="field"><label for="double-donation">เงินบริจาคที่หักได้ 2 เท่า</label><div class="input-with-unit"><input id="double-donation" name="doubleDonation" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>กรอกยอดที่บริจาคจริง ระบบประมาณการหักสองเท่าตามเพดานเบื้องต้น</small></div>
+                <div class="field"><label for="yearly-measure">มาตรการลดหย่อนพิเศษของปีภาษี</label><div class="input-with-unit"><input id="yearly-measure" name="yearlyMeasure" type="text" inputmode="decimal" autocomplete="off" placeholder="0"><span>บาท</span></div><small>สิทธิและเพดานปี <span class="tax-year-inline"></span>: ต้องตรวจสอบกับกรมสรรพากร</small></div>
+                <div class="field field-wide">
+                  <div class="field-topline"><span class="field-label">ค่าลดหย่อนอื่น</span><button class="text-button" id="add-other" type="button">＋ เพิ่มรายการ</button></div>
+                  <div id="other-deductions-list" class="dynamic-list" aria-live="polite"></div>
+                  <small>กรอกชื่อรายการและยอดที่ต้องการประเมิน; เพดานยังไม่ยืนยัน</small>
+                </div>
+              </div>
+            </section>
+
+            <div class="form-actions">
+              <button class="button button-primary" type="button" id="calculate-button"><span aria-hidden="true">↗</span> คำนวณภาษี</button>
+              <button class="button button-secondary" type="button" id="sample-button">โหลดข้อมูลตัวอย่าง</button>
+              <button class="button button-quiet" type="reset" id="clear-button">ล้างข้อมูล</button>
+            </div>
+            <p id="error-message" class="error-message" role="alert" hidden></p>
+          </form>
+        </div>
+
+        <aside class="results-column" aria-labelledby="results-title">
+          <section class="result-panel">
+            <div class="result-heading"><div><p class="eyebrow">สรุปประมาณการ</p><h2 id="results-title">ผลคำนวณภาษี</h2></div><span class="result-spark" aria-hidden="true">✳</span></div>
+            <div id="balance-card" class="balance-card" aria-live="polite">
+              <span id="balance-label">กรอกข้อมูลเพื่อเริ่มคำนวณ</span>
+              <strong id="balance-value">— บาท</strong>
+              <small id="balance-caption">ผลจะอัปเดตทันทีเมื่อเปลี่ยนข้อมูล</small>
+            </div>
+            <div class="result-metrics">
+              <div><span>รายได้รวม</span><strong id="gross-result">0 บาท</strong></div>
+              <div><span>ค่าใช้จ่ายรวม</span><strong id="expense-result">0 บาท</strong></div>
+              <div><span>ค่าลดหย่อนรวม</span><strong id="deduction-result">0 บาท</strong></div>
+              <div class="metric-highlight"><span>เงินได้สุทธิ <span class="term" tabindex="0" title="รายได้รวม หลังหักค่าใช้จ่ายและค่าลดหย่อน">ⓘ</span></span><strong id="taxable-result">0 บาท</strong></div>
+              <div><span>ภาษีก่อนหัก ณ ที่จ่าย</span><strong id="tax-result">0 บาท</strong></div>
+              <div><span>ภาษีหัก ณ ที่จ่าย</span><strong id="withholding-result">0 บาท</strong></div>
+            </div>
+            <div class="rate-grid">
+              <div><span>อัตราภาษีขั้นสูงสุด</span><strong id="highest-rate">0%</strong></div>
+              <div><span>อัตราภาษีเฉลี่ย <span class="term" tabindex="0" title="ภาษีที่คำนวณได้ หารด้วยรายได้รวม">ⓘ</span></span><strong id="average-rate">0%</strong></div>
+              <div><span>ภาษีเฉลี่ยต่อเดือน</span><strong id="monthly-tax">0 บาท</strong></div>
+            </div>
+          </section>
+
+          <section class="result-panel breakdown-panel" aria-labelledby="breakdown-title">
+            <div class="subsection-heading"><div><span class="eyebrow">คำนวณแบบขั้นบันได</span><h3 id="breakdown-title">ภาษีแต่ละช่วง</h3></div><span class="term" tabindex="0" title="คิดภาษีเฉพาะส่วนของเงินได้ที่อยู่ในช่วงนั้น ไม่ได้นำเงินได้ทั้งหมดคูณอัตราสูงสุด">ⓘ</span></div>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th scope="col">ช่วงเงินได้สุทธิ</th><th scope="col">เงินได้ในช่วง</th><th scope="col">อัตรา</th><th scope="col">ภาษี</th></tr></thead>
+                <tbody id="bracket-rows"></tbody>
+              </table>
+            </div>
+            <div class="formula-note"><strong>สูตรย่อ</strong><p>รายได้รวม − ค่าใช้จ่าย − ค่าลดหย่อน = เงินได้สุทธิ<br>ภาษีที่คำนวณได้ − ภาษีหัก ณ ที่จ่าย = ยอดจ่ายเพิ่ม / คาดว่าจะได้รับคืน</p></div>
+          </section>
+
+          <section class="result-panel savings-panel" aria-labelledby="savings-title">
+            <div class="subsection-heading"><div><span class="eyebrow">ผลของแต่ละสิทธิ</span><h3 id="savings-title">รายการนี้ช่วยลดภาษีประมาณเท่าไร?</h3></div></div>
+            <p class="savings-note">เปรียบเทียบกับกรณีไม่ใช้รายการนั้นทีละรายการ ยอดของแต่ละแถวจึงไม่ควรนำมาบวกเป็นยอดรวม</p>
+            <div id="deduction-impacts" class="deduction-impacts" aria-live="polite"></div>
+          </section>
+
+          <section class="result-panel chart-panel" aria-labelledby="chart-title">
+            <div class="subsection-heading"><div><span class="eyebrow">เห็นภาพรวม</span><h3 id="chart-title">สรุปสัดส่วน</h3></div></div>
+            <div id="summary-chart" class="summary-chart" role="img" aria-label="กราฟสรุปรายได้ ค่าใช้จ่าย ค่าลดหย่อน เงินได้สุทธิ และภาษี"></div>
+          </section>
+
+          <section id="warnings-panel" class="warning-panel" aria-labelledby="warnings-title" hidden>
+            <h3 id="warnings-title"><span aria-hidden="true">!</span> รายการที่ควรตรวจสอบ</h3>
+            <ul id="warnings-list"></ul>
+          </section>
+        </aside>
+      </div>
+
+      <section class="calculation-guide" aria-labelledby="guide-title">
+        <h2 id="guide-title">คำนวณอย่างไร?</h2>
+        <ol>
+          <li><strong>รวมรายได้ทั้งปี</strong><span>เงินเดือน โบนัส ค่าคอมมิชชัน ค่าล่วงเวลา และรายได้อื่น</span></li>
+          <li><strong>หักค่าใช้จ่าย</strong><span>ใช้สูตรและเพดานค่าใช้จ่ายเงินเดือนในชุดข้อมูล</span></li>
+          <li><strong>หักค่าลดหย่อน</strong><span>ระบบจำกัดยอดตามเพดานตั้งต้นที่แสดงในแต่ละรายการ</span></li>
+          <li><strong>คำนวณภาษีขั้นบันได</strong><span>คิดเฉพาะเงินได้ที่ตกอยู่ในแต่ละช่วงอัตราภาษี</span></li>
+        </ol>
+      </section>
+      <footer class="site-footer">
+        <p><strong>หมายเหตุ:</strong> เว็บไซต์นี้ใช้เพื่อประมาณการเท่านั้น ไม่ใช่คำแนะนำด้านภาษีอย่างเป็นทางการ กฎและเพดานอาจมีการเปลี่ยนแปลง โปรดตรวจสอบกับกรมสรรพากรก่อนยื่นภาษี</p>
+        <p>ข้อมูลที่กรอกใช้คำนวณในเบราว์เซอร์ ไม่ส่งไปยังเซิร์ฟเวอร์ และไม่มีการขอชื่อจริงหรือเลขประจำตัวประชาชน</p>
+      </footer>
+    </main>
+  </body>
+</html>
